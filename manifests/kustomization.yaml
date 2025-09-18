@@ -1,5 +1,0 @@
-resources:
-  - og.yaml
-  - wait-crd.yaml
-  - cr.yaml
-
