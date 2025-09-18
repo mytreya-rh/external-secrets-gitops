@@ -4,5 +4,7 @@ metadata:
   name: cluster
   annotations:
     argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
 
 spec: {}
