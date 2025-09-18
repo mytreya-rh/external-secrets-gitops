@@ -1,17 +1,8 @@
-#namespace
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: external-secrets-operator
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
----
 # OperatorGroup - must be AllNamespaces for Red Hat operator
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: external-secrets-operator-group
-  namespace: external-secrets-operator
   annotations:
     argocd.argoproj.io/sync-wave: "0"
 
@@ -23,7 +14,6 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: external-secrets-operator
-  namespace: external-secrets-operator
   annotations:
     argocd.argoproj.io/sync-wave: "0"
 spec:
