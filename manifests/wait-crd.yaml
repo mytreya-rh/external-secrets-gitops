@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wait-for-es-crd
+  namespace: external-secrets-operator
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: wait
+        image: registry.access.redhat.com/ubi9/ubi
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Waiting for ExternalSecrets CRD..."
+          for i in {1..30}; do
+            if oc get crd externalsecrets.operator.openshift.io; then
+              echo "CRD is ready!"
+              exit 0
+            fi
+            echo "CRD not ready yet... retrying"
+            sleep 5
+          done
+          echo "Timed out waiting for CRD"
+          exit 1
+
