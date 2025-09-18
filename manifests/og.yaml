@@ -26,3 +26,9 @@ spec:
   sourceNamespace: openshift-marketplace
 
 ---
+apiVersion: operator.openshift.io/v1alpha1
+kind: ExternalSecrets
+metadata:
+  name: cluster
+spec: {}
+---
