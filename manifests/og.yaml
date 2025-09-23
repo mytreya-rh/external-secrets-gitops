@@ -16,9 +16,11 @@ metadata:
   #annotations:
   #  argocd.argoproj.io/sync-wave: "-1"
 spec:
-  channel: tech-preview-v0.1
+  #channel: tech-preview-v0.1
+  channel: alpha
   name: openshift-external-secrets-operator
-  source: redhat-operators
+  #source: redhat-operators
+  source: eso-custom-index
   sourceNamespace: openshift-marketplace
 
 ---
