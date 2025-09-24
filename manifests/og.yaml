@@ -17,12 +17,16 @@ metadata:
   #  argocd.argoproj.io/sync-wave: "-1"
 spec:
   #channel: tech-preview-v0.1
-  channel: alpha
-  name: openshift-external-secrets-operator
+  #channel: alpha
+  #name: openshift-external-secrets-operator
   #source: redhat-operators
+  #source: eso-custom-index5
+  #sourceNamespace: openshift-marketplace
+  channel: alpha
+  installPlanApproval: Automatic
+  name: external-secrets-operator
   source: eso-custom-index5
   sourceNamespace: openshift-marketplace
-
 ---
 apiVersion: operator.openshift.io/v1alpha1
 kind: ExternalSecrets
