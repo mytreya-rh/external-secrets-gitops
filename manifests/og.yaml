@@ -28,7 +28,7 @@ spec:
   source: eso-custom-index11
   sourceNamespace: openshift-marketplace
 ---
-apiVersion: operator.openshift.io/v1
+apiVersion: operator.openshift.io/v1alpha1
 kind: ExternalSecretsConfig
 metadata:
   name: cluster
