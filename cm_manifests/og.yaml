@@ -6,7 +6,6 @@ metadata:
   #annotations:
   #  argocd.argoproj.io/sync-wave: "-2"
 spec: {}  # AllNamespaces install mode
-
 ---
 # Subscription to Red Hat External Secrets Operator
 apiVersion: operators.coreos.com/v1alpha1
