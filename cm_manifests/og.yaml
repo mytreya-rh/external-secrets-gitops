@@ -1,0 +1,80 @@
+# OperatorGroup - must be AllNamespaces for Red Hat operator
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: cm-operator-group
+  #annotations:
+  #  argocd.argoproj.io/sync-wave: "-2"
+spec: {}  # AllNamespaces install mode
+
+---
+# Subscription to Red Hat External Secrets Operator
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: cm-operator
+  #annotations:
+  #  argocd.argoproj.io/sync-wave: "-1"
+spec:
+  channel: alpha
+  installPlanApproval: Automatic
+  name: cm-operator
+  source: cm-custom-index
+  sourceNamespace: openshift-marketplace
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer 
+metadata:
+  name: selfsigned
+  namespace: istio-system 
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: istio-ca
+  namespace: istio-system
+spec:
+ isCA: true
+  duration: 87600h # 10 years
+  secretName: istio-ca
+  commonName: istio-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  subject:
+    organizations:
+      - cluster.local
+      - cert-manager
+  issuerRef:
+    name: selfsigned
+    kind: Issuer 
+    group: cert-manager.io
+---
+kind: Issuer
+metadata:
+  name: istio-ca
+  namespace: istio-system 
+spec:
+  ca:
+    secretName: istio-ca
+---
+apiVersion: operator.openshift.io/v1alpha1
+kind: IstioCSR
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  IstioCSRConfig:
+    certManager:
+      issuerRef:
+        name: istio-ca
+        kind: Issuer
+        group: cert-manager.io
+    istiodTLSConfig:
+      trustDomain: cluster.local
+    istio:
+      namespace: istio-system
+---
+
