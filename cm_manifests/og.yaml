@@ -3,6 +3,7 @@ apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: cm-operator-group
+  namespace: cert-manager-operator
   #annotations:
   #  argocd.argoproj.io/sync-wave: "-2"
 spec: {}  # AllNamespaces install mode
@@ -11,14 +12,13 @@ spec: {}  # AllNamespaces install mode
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: cm-operator
-  #annotations:
-  #  argocd.argoproj.io/sync-wave: "-1"
+  name: cert-manager-operator
+  namespace: cert-manager-operator
 spec:
-  channel: alpha
+  channel: stable-v1
   installPlanApproval: Automatic
-  name: cm-operator
-  source: cm-custom-index
+  name: cert-manager-operator
+  source: cm-custom-index-2
   sourceNamespace: openshift-marketplace
 ---
 apiVersion: cert-manager.io/v1
@@ -35,7 +35,7 @@ metadata:
   name: istio-ca
   namespace: istio-system
 spec:
- isCA: true
+  isCA: true
   duration: 87600h # 10 years
   secretName: istio-ca
   commonName: istio-ca
@@ -51,6 +51,7 @@ spec:
     kind: Issuer 
     group: cert-manager.io
 ---
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: istio-ca
@@ -65,7 +66,7 @@ metadata:
   name: default
   namespace: istio-system
 spec:
-  IstioCSRConfig:
+  istioCSRConfig:
     certManager:
       issuerRef:
         name: istio-ca
