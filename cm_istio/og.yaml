@@ -21,6 +21,42 @@ spec:
   source: cm-custom-index-3
   sourceNamespace: openshift-marketplace
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: argocd-cert-manager-creator
+  namespace: istio-system
+rules:
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  - issuers
+  - certificaterequests
+  verbs:
+  - create
+  - get
+  - update
+  - delete
+  - patch
+  - watch
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argocd-cert-manager-binding
+  namespace: istio-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: argocd-cert-manager-creator
+subjects:
+- kind: ServiceAccount
+  # Replace 'openshift-gitops-argocd-application-controller' with the actual SA name if different
+  name: openshift-gitops-argocd-application-controller 
+  namespace: openshift-gitops # The namespace where the ServiceAccount lives
+---  
 apiVersion: cert-manager.io/v1
 kind: Issuer 
 metadata:
