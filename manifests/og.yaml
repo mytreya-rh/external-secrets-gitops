@@ -25,7 +25,7 @@ spec:
   channel: alpha
   installPlanApproval: Automatic
   name: external-secrets-operator
-  source: eso-custom-index25
+  source: eso-custom-index26
   sourceNamespace: openshift-marketplace
 ---
 apiVersion: operator.openshift.io/v1alpha1
