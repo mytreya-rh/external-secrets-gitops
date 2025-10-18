@@ -21,42 +21,26 @@ spec:
   source: cm-custom-index-3
   sourceNamespace: openshift-marketplace
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+apiVersion: operator.openshift.io/v1alpha1
+kind: IstioCSR
 metadata:
-  name: argocd-cert-manager-creator
+  name: default
   namespace: istio-system
-rules:
-- apiGroups:
-  - cert-manager.io
-  resources:
-  - certificates
-  - issuers
-  - certificaterequests
-  verbs:
-  - create
-  - get
-  - update
-  - delete
-  - patch
-  - watch
-  - list
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: argocd-cert-manager-binding
-  namespace: istio-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: argocd-cert-manager-creator
-subjects:
-- kind: ServiceAccount
-  # Replace 'openshift-gitops-argocd-application-controller' with the actual SA name if different
-  name: openshift-gitops-argocd-application-controller 
-  namespace: openshift-gitops # The namespace where the ServiceAccount lives
----  
+  annotations:
+    #argocd.argoproj.io/sync-wave: "10"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true  
+spec:
+  istioCSRConfig:
+    certManager:
+      issuerRef:
+        name: istio-ca
+        kind: Issuer
+        group: cert-manager.io
+    istiodTLSConfig:
+      trustDomain: cluster.local
+    istio:
+      namespace: istio-system
+---      
 apiVersion: cert-manager.io/v1
 kind: Issuer 
 metadata:
@@ -105,24 +89,3 @@ spec:
   ca:
     secretName: istio-ca
 ---
-apiVersion: operator.openshift.io/v1alpha1
-kind: IstioCSR
-metadata:
-  name: default
-  namespace: istio-system
-  annotations:
-    #argocd.argoproj.io/sync-wave: "10"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true  
-spec:
-  istioCSRConfig:
-    certManager:
-      issuerRef:
-        name: istio-ca
-        kind: Issuer
-        group: cert-manager.io
-    istiodTLSConfig:
-      trustDomain: cluster.local
-    istio:
-      namespace: istio-system
----
-
