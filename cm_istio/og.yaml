@@ -20,7 +20,7 @@ spec:
   channel: stable-v1
   installPlanApproval: Automatic
   name: cert-manager-operator
-  source: cm-custom-index-4
+  source: cm-custom-index-5
   sourceNamespace: openshift-marketplace
 ---
 apiVersion: cert-manager.io/v1
